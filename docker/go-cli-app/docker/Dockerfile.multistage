@@ -1,0 +1,11 @@
+FROM golang:alpine as build
+WORKDIR /app 
+COPY go.mod ./
+COPY . .
+RUN GOOS=linux go build -o go-cli-app 
+
+# 
+FROM alpine
+WORKDIR /app
+COPY --from=build /app /app/
+CMD [ "./go-cli-app" ]

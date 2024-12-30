@@ -1,0 +1,13 @@
+FROM golang:alpine as build
+WORKDIR /app
+COPY go.mod go.sum ./ 
+RUN go mod download
+COPY . .
+RUN GOOS=linux go build -o go-fiber
+
+
+FROM alpine
+WORKDIR /app
+COPY --from=build /app /app/
+EXPOSE 9000
+CMD ["./go-fiber"]
