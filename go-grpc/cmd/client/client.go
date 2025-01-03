@@ -7,7 +7,8 @@ import (
 	"log"
 	"time"
 
-	"golang-pocs/pb"
+	"golang-pocs/pkg/pb"
+
 	"google.golang.org/grpc"
 )
 

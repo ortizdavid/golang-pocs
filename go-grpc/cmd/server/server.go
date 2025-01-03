@@ -4,9 +4,10 @@ import (
 	"log"
 	"net"
 
-	"golang-pocs/pb"
+	"golang-pocs/pkg/pb"
 
-	"golang-pocs/services"
+	"golang-pocs/pkg/services"
+
 	"google.golang.org/grpc"
 )
 

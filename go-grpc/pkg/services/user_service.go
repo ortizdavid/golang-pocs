@@ -7,7 +7,7 @@ import (
 	"log"
 	"time"
 
-  "golang-pocs/pb"
+	"golang-pocs/pkg/pb"
 )
 
 type UserService struct {
