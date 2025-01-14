@@ -7,8 +7,7 @@ import (
 func main() {
 
 	chStr := make(chan string)
-	
-	
+
 }
 
 func myFunction()  {

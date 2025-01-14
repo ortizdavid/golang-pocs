@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }}</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        table { 
+            border-collapse: collapse; 
+            width:100%; 
+        }
+        .table-report {
+            width: 100%;
+        }
+        th { 
+            background-color: grey; 
+            color:white;
+            height: 20px; 
+            padding:3px; 
+            text-align:left;
+        }
+        td { 
+            padding: 5px; 
+        }
+    </style>
+</head>
+<body>
+    <br>
+    <h2>{{ .AppName }}</h2>
+    <h3>{{ .Title }}</h3>
+    <hr>
+    {{ if .Count }}
+        <p><b>Total: </b>{{ .Count }}</p>
+        <table >
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Username</th>
+                    <th>Active?</th>
+                    <th>Created at</th>
+                    <th>Updated at</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range .Rows }}
+                    <tr>
+                        <td>{{ .UserId }}</td>
+                        <td>{{ .UserName }}</td>
+                        <td>{{ .Active }}</td>
+                        <td>{{ .CreatedAt }}</td>
+                        <td>{{ .UpdatedAt }}</td>
+                    </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    {{ else }}
+        <div>
+            <h5>No Records Found!</h5>
+        </div>
+    {{ end }}
+</body>
+</html>

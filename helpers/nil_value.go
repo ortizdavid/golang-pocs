@@ -98,7 +98,7 @@ func Int32OrNilToString(number *int32) string {
 
 
 func insertUser(user User) error {
-	db, err := sql.Open("mysql", "root:003334743LA032@tcp(127.0.0.1:3306)/test_nulls")
+	db, err := sql.Open("mysql", "root:<password>@tcp(127.0.0.1:3306)/test_nulls")
 	if err != nil {
 		return err
 	}

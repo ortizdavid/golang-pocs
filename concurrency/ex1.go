@@ -16,5 +16,4 @@ func main() {
 	data := <-ch
 	
 	fmt.Println(data)
-
 }

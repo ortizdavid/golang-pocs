@@ -2,7 +2,6 @@ package main
 
 import "fmt"
 
-
 func oddNumbers(array []int) []int {
 	var odds []int
 	for _, elem := range array {
@@ -31,7 +30,6 @@ func printArray(array []int) {
 	fmt.Print("]")
 }
 
-
 func main() {
 
 	var array [5]int
@@ -47,5 +45,4 @@ func main() {
 
 	fmt.Print("\nEvens: ")
 	printArray(evenNumbers(array[:]))
-
 }

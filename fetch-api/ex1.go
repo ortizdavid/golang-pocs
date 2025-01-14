@@ -16,7 +16,7 @@ type Todo struct {
 	Completed bool   `jon:"completed"`
 }
 
-
+// GET
 func getTodo() {
 	fmt.Println("1 - Performing HTTP Get...")
 	resp, err := http.Get("https://jsonplaceholder.typicode.com/todos/1")
@@ -31,7 +31,7 @@ func getTodo() {
 	fmt.Printf("API Response:\n%v", bodyString)
 }
 
-
+// POST
 func postTodo() {
 	fmt.Println("\n2 - Performing HTTP Post...")
 	todo := Todo{
@@ -55,7 +55,7 @@ func postTodo() {
 
 }
 
-
+//PUT
 func putTodo()  {
 	fmt.Println("\n3 - Performing HTTP Put...")
 	todo := Todo{
@@ -82,7 +82,7 @@ func putTodo()  {
 }
 
 func main() {
-	//getTodo()
-	//postTodo()
+	getTodo()
+	postTodo()
 	putTodo()
 }

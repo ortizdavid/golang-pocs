@@ -1,0 +1,21 @@
+UserId,TaskName,StartDate,EndDate,Description
+1,Project Planning,2024-05-01,2024-05-10,Initial planning and resource allocation
+2,Design Phase,2024-05-11,2024-05-20,Designing the architecture and UI
+3,Development Sprint 1,2024-05-21,2024-06-10,First sprint focusing on backend development
+4,Testing Phase 1,2024-06-11,2024-06-20,Initial testing and bug fixing
+5,Client Review,2024-06-21,2024-06-25,Review meeting with the client for feedback
+6,Development Sprint 2,2024-06-26,2024-07-15,Second sprint focusing on frontend development
+7,Testing Phase 2,2024-07-16,2024-07-25,Second round of testing
+8,Deployment Preparation,2024-07-26,2024-07-30,Preparing the environment for deployment
+9,Go Live,2024-07-31,2024-08-01,Deploying the project to production
+10,Post Deployment Review,2024-08-02,2024-08-05,Reviewing the deployment and addressing issues
+11,Feature Update 1,2024-08-06,2024-08-15,Adding new features as per client request
+12,Maintenance,2024-08-16,2024-08-20,Regular maintenance and updates
+13,Project Closure,2024-08-21,2024-08-25,Closing the project and documentation
+14,Team Retrospective,2024-08-26,2024-08-27,Team meeting to discuss project outcomes
+15,Research Phase,2024-08-28,2024-09-05,Research for new project initiatives
+16,Prototype Development,2024-09-06,2024-09-15,Developing prototypes for new ideas
+17,Stakeholder Meeting,2024-09-16,2024-09-18,Meeting with stakeholders to discuss new project
+18,Budget Approval,2024-09-19,2024-09-20,Getting budget approval for the new project
+19,Resource Allocation,2024-09-21,2024-09-25,Allocating resources for the new project
+20,Training Session,2024-09-26,2024-09-30,Training team members on new tools and techniques

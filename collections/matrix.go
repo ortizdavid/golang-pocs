@@ -44,7 +44,6 @@ func printMatrixIndex(matrix [][]int) {
 	}
 }
 
-
 func generateRandomMatrix(numLines int, numCols int) [][]int {
 	matrix := make([][]int, numLines)
 	for i := range matrix {
@@ -88,7 +87,6 @@ func sumAverage(matrix [][]int) (int, float32) {
 	return sum, average
 }
 
-
 func matrixInfo(matrix [][]int) {
 	min, max := minMaxElem(matrix)
 	sum, average := sumAverage(matrix)
@@ -98,17 +96,16 @@ func matrixInfo(matrix [][]int) {
 	fmt.Println("Average: ", average)
 }
 
-
 func main() {
 	
 	//readMatrix(2, 2)
 	//printMatrixIndex(mat1)
 
-	/*mat2 := [][]int{
+	mat2 := [][]int{
 		{1, 2, 3},
 		{4, 5, -6},
 	}
-	printMatrixIndex(mat2)*/
+	printMatrixIndex(mat2)
 
 	mat3 := generateRandomMatrix(5, 5)
 	printMatrixIndex(mat3)

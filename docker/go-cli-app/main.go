@@ -12,7 +12,6 @@ func main() {
 	os.Mkdir("folder2", 0755)
 	os.Mkdir("folder3", 0755)
 	os.MkdirAll("multi-folder/s1/s2/s3", 0755)
-	
 }
 
 

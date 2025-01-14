@@ -20,5 +20,4 @@ func main() {
 	printNumber(10)
 
 	fmt.Println("Time elapsed: ", time.Since(start))
-
 }

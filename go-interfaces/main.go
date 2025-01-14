@@ -14,7 +14,6 @@ type Processor struct {
 	Worker IWorker
 }
 
-
 func (p *Processor) DoWork(msg string) {
 	err := p.Worker.Operation(msg)
 	if err != nil {
@@ -22,8 +21,6 @@ func (p *Processor) DoWork(msg string) {
 	}
 	fmt.Printf("It works\nId: %d!\nMessage: %s", p.Id, msg)
 }
-
-
 
 func main() {
 	var primary PrimaryWorker
@@ -43,7 +40,6 @@ func main() {
 	pr1.DoWork("Doing Processor 1")
 	pr2.DoWork("Doing Processor 2")
 }
-
 
 type PrimaryWorker struct {
 }

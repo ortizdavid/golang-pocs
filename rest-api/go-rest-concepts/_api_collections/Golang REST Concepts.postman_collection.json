@@ -1,0 +1,265 @@
+{
+	"info": {
+		"_postman_id": "64274004-e521-45d7-9d96-5d7b81b35772",
+		"name": "Golang REST Concepts",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13144775"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"\",\r\n    \"password\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{GO_REST_CONCEPTS}}/auth/login",
+							"host": [
+								"{{GO_REST_CONCEPTS}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{GO_REST_CONCEPTS}}/auth/logout",
+							"host": [
+								"{{GO_REST_CONCEPTS}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Get All Tasks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{GO_REST_CONCEPTS}}/tasks",
+							"host": [
+								"{{GO_REST_CONCEPTS}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Task by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{GO_REST_CONCEPTS}}/tasks/1",
+							"host": [
+								"{{GO_REST_CONCEPTS}}"
+							],
+							"path": [
+								"tasks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Tasks XML",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{GO_REST_CONCEPTS}}/tasks-xml",
+							"host": [
+								"{{GO_REST_CONCEPTS}}"
+							],
+							"path": [
+								"tasks-xml"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Task XML",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{GO_REST_CONCEPTS}}/tasks-xml/4",
+							"host": [
+								"{{GO_REST_CONCEPTS}}"
+							],
+							"path": [
+								"tasks-xml",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Task Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": 123,\r\n    \"TaskName\": \"\",\r\n    \"StartDate\": \"2024-01-01\",\r\n    \"EndDate\": \"20024-01-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{GO_REST_CONCEPTS}}/tasks",
+							"host": [
+								"{{GO_REST_CONCEPTS}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Task",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": 123,\r\n    \"TaskName\": \"\",\r\n    \"StartDate\": \"2024-01-01\",\r\n    \"EndDate\": \"2024-01-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{GO_REST_CONCEPTS}}/tasks",
+							"host": [
+								"{{GO_REST_CONCEPTS}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{GO_REST_CONCEPTS}}/tasks/1",
+							"host": [
+								"{{GO_REST_CONCEPTS}}"
+							],
+							"path": [
+								"tasks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Task",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"UserId\": 123,\r\n    \"TaskName\": \"Nothing\",\r\n    \"StartDate\": \"2024-01-01\",\r\n    \"EndDate\": \"2024-01-01\",\r\n    \"Description\": \"Nothing Done\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{GO_REST_CONCEPTS}}/tasks/2",
+							"host": [
+								"{{GO_REST_CONCEPTS}}"
+							],
+							"path": [
+								"tasks",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Protected Test",
+			"item": [
+				{
+					"name": "/protected-apikey",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "key12345",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{API_ROOT}}/protected-apikey",
+							"host": [
+								"{{API_ROOT}}"
+							],
+							"path": [
+								"protected-apikey"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

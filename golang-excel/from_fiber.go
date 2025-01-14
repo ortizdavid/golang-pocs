@@ -123,7 +123,6 @@ func fetchDataFromDatabase() ([]Employee, error) {
 		{2, "Bob", 35, "Los Angeles"},
 		{2, "Bob", 35, "Los Angeles"},
 		{2, "Bob", 35, "Los Angeles"},
-		// ... add more employees as needed
 	}
 
 	return employees, nil

@@ -21,7 +21,6 @@ func main() {
 	time.Sleep(1 * time.Second)
 }
 
-
 func doWork(ctx context.Context)  {
 	for {
 		select {

@@ -34,5 +34,4 @@ func main() {
 	}
 	Tr(&p)
 	fmt.Println(p)
-
 }
