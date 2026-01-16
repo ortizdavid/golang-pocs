@@ -1,0 +1,10 @@
+{
+    "product.created": "Produto criado com sucesso.",
+    "product.updated": "Produto atualizado com sucesso.",
+    "product.delete": "Produto removido com sucesso.",
+    "product.already_exists": "Erro: Já existe um produto com este código.",
+    "product.not_found": "Erro: Produto não encontrado.",
+    "product.error.create": "Falha ao tentar criar o produto.",
+    "product.error.update": "Falha ao tentar atualizar o produto.",
+    "product.error.delete": "Falha ao tentar remover o produto."
+}
