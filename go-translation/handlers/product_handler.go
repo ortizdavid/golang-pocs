@@ -1,4 +1,41 @@
-c
+package handlers
+
+import (
+	"strconv"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/ortizdavid/golang-pocs/go-translation/i18n"
+	"github.com/ortizdavid/golang-pocs/go-translation/models"
+	"github.com/ortizdavid/golang-pocs/go-translation/repositories"
+)
+
+
+type ProductHandler struct {
+	repository *repositories.ProductRepository
+}
+
+func NewProductHandler(repository *repositories.ProductRepository) *ProductHandler {
+	return &ProductHandler{
+		repository: repository,
+	}
+}
+
+func (h *ProductHandler) Routes(router *fiber.App) {
+	group := router.Group("/products")
+	group.Post("/", h.create)
+	group.Put("/:id", h.update)
+	group.Delete("/:id", h.delete)
+	group.Get("/:id", h.getByID)
+}
+
+func (h *ProductHandler) create(c *fiber.Ctx) error {
+	var product models.ProductModel
+	c.BodyParser(&product)
+
+	return c.Status(201).JSON(fiber.Map{
+		"message": i18n.T(c, "product.created"),
+	})
+}
 
 func (h *ProductHandler) update(c *fiber.Ctx) error {
 	id, _ := strconv.Atoi(c.Params("id"))
