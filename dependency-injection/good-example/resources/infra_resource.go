@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// InfraResources centralize infra dependenciesl
+// InfraResources centralize infra dependencies
 type InfraResources struct {
     DB     *gorm.DB
     Cache  *redis.Client 
