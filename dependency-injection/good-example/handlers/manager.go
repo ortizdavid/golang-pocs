@@ -17,7 +17,7 @@ func NewHandlerManager(svcs *container.ServiceContainer) *HandlerManager {
 	}
 }
 
-// InitRoutes centraliza todo o roteamento da API
+// InitRoutes centralize API routes
 func (m *HandlerManager) InitRoutes(app *fiber.App) {
 	api := app.Group("/api/v1")
 	
