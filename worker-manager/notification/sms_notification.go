@@ -21,7 +21,7 @@ func (sms *SmsNotification) Send(ctx context.Context, phone string, text string)
 	cleanNumber := sms.sanitizeNumber(phone)
 	
 	// logic here: api call, response, ..
-    fmt.Printf("Sending message '%s' to '%s", text, cleanNumber)
+    fmt.Printf("\nSending message '%s' to '%s'\n", text, cleanNumber)
 	// .....
 
 	sms.logger.Info("Message sent", 

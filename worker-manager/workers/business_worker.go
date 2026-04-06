@@ -2,6 +2,7 @@ package workers
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"time"
 
@@ -17,7 +18,7 @@ func NewBusinessWorker(service *business.BusinessService) *BusinessWorker {
 }
 
 func (w *BusinessWorker) Start(ctx context.Context) error {
-	slog.Info("worker started", "name", w.Name())
+	slog.Info(fmt.Sprintf("worker %s started",  w.Name()))
 	
 	ticker := time.NewTicker(3 * time.Second)
     defer ticker.Stop()
@@ -44,6 +45,6 @@ func (w *BusinessWorker) Name() string {
 }
 
 func (w *BusinessWorker) process(ctx context.Context) error {
-	w.service.ProcessOperation()
+	w.service.ProcessOperation(ctx)
 	return nil
 }

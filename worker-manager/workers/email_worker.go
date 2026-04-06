@@ -2,6 +2,7 @@ package workers
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"time"
 
@@ -17,9 +18,9 @@ func NewEmailWorker(email *notification.EmailNotification) *EmailWorker {
 }
 
 func (w *EmailWorker) Start(ctx context.Context) error {
-	slog.Info("worker started", "name", w.Name())
+	slog.Info(fmt.Sprintf("worker %s started",  w.Name()))
 	
-    ticker := time.NewTicker(3 * time.Second)
+    ticker := time.NewTicker(5 * time.Second)
     defer ticker.Stop()
 
     for {

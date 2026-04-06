@@ -20,7 +20,7 @@ func (em *EmailNotification) Send(ctx context.Context, from string, to string, d
 	toEmail := em.sanitizeEmail(to)
 	
 	// logic here: template, connection, sending....
-    fmt.Printf("Sending email from '%s' to '%s", fromEmail, toEmail)
+    fmt.Printf("\nSending email from '%s' to '%s'\n", fromEmail, toEmail)
 	// .....
 
 	em.logger.Info("Message sent", 

@@ -40,11 +40,8 @@ func NewWorkerManager(logger *slog.Logger) *WorkerManager {
 func (wm *WorkerManager) Run(ctx context.Context) error {
 	errChan := make(chan error, len(wm.Workers))
 
-	for _, w := range wm.Workers {
-		wm.logger.Info(fmt.Sprintf("Starting worker: %s", w.Name()))
-		if err := w.Start(ctx); err != nil {
-			errChan <- fmt.Errorf("worker %s failed: %w", w.Name(), err)
-		}
+	for _, worker := range wm.Workers {
+		go wm.startWorker(ctx, worker, errChan)
 	}
 
 	select {
@@ -66,6 +63,30 @@ func (wm *WorkerManager) StopAll(ctx context.Context) error {
 	return nil
 }
 
+ func (wm *WorkerManager) startWorker(ctx context.Context, worker BackgroundWorker, errChan chan error) {
+	defer func() {
+		if r := recover(); r != nil {
+			wm.logger.Error(fmt.Sprintf("RECOVERED panic in worker %s: %v", worker.Name(), r), "", nil)
+			errChan <- fmt.Errorf("worker %s panicked", worker.Name())
+		}
+	}()
+
+	wm.logger.Info(fmt.Sprintf("Starting worker: %s", worker.Name()))
+
+	if err := worker.Start(ctx); err != nil {
+		errChan <- fmt.Errorf("worker %s failed: %w", worker.Name(), err)
+	}
+ }
+
 func (wm *WorkerManager) Info() {
-	fmt.Println("")
+	fmt.Println("========================================================")
+	fmt.Println("\t\t\tBACKGROUND WORKERS")
+	fmt.Println("========================================================")
+	fmt.Println("STATUS         : RUNNING [MANAGER]")
+	fmt.Println("PROTECTION     : RECOVER & GRACEFUL SHUTDOWN")
+
+	for i, w := range wm.Workers {
+		fmt.Printf("[%d] %s\n", i+1, w.Name())
+	}
+	fmt.Printf("========================================================\n\n")
 }
