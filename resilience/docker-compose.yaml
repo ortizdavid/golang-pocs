@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: resilience_postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: resilience_db
+    ports:
+      - "5433:5432"
+
+  redis:
+    image: redis:latest
+    container_name: resilience_redis
+    ports:
+      - "6380:6379"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: resilience_rabbitmq
+    ports:
+      - "5673:5672"
+      - "15673:15672"
