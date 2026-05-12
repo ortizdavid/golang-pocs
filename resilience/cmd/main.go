@@ -22,11 +22,11 @@ func main() {
 
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: false,
-		AppName:               "Go Resilience POC",
+		AppName:               "Go Resilience POCs",
 	})
 
-	hdl := handlers.NewHealthHandler(infra)
-	hdl.Routes(app)
+	handler := handlers.NewHealthHandler(infra)
+	handler.Routes(app)
 
 	go func() {
 		logger.Info("Starting server on :3000")

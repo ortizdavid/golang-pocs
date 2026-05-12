@@ -17,22 +17,42 @@ func NewHealthHandler(res *resources.InfraResources) *HealthHandler {
 }
 
 func (h *HealthHandler) Routes(router *fiber.App) {
-	router.Get("/health")
+	router.Get("/health", h.health)
 }
 
-func (h *HealthHandler) HealthCheck(c *fiber.Ctx) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
-	defer cancel()
+func (h *HealthHandler) health(c *fiber.Ctx) error {
+    ctx, cancel := context.WithTimeout(c.UserContext(), 2*time.Second)
+    defer cancel()
 
-	err := h.res.Database.Ping(ctx)
-	if err != nil {
-		return c.Status(503).JSON(fiber.Map{
-			"status":  "degraded",
-			"message": "Database is using No-Op mode",
-		})
-	}
+    // Ping
+    dbErr := h.res.Database.Ping(ctx)
+    cacheErr := h.res.Cache.Ping(ctx)
+    brokerErr := h.res.MessageBroker.Ping(ctx)
 
-	return c.JSON(fiber.Map{"status": "ok", "message": "Real Database is online"})
-	
-	
+    // Check status
+    isDegraded := dbErr != nil || cacheErr != nil || brokerErr != nil
+
+    statusData := fiber.Map{
+        "status": "ok",
+        "services": fiber.Map{
+            "database": h.checkService(dbErr),
+            "cache":    h.checkService(cacheErr),
+            "broker":   h.checkService(brokerErr),
+        },
+        "timestamp": time.Now().Format(time.RFC3339),
+    }
+
+    if isDegraded {
+        statusData["status"] = "degraded"
+        return c.Status(fiber.StatusServiceUnavailable).JSON(statusData)
+    }
+
+    return c.JSON(statusData)
+}
+
+func (h *HealthHandler) checkService(err error) string {
+    if err != nil {
+        return "No-Op (Offline)"
+    }
+    return "Real (Online)"
 }

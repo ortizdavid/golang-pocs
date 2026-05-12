@@ -16,10 +16,9 @@ type InfraResources struct {
 }
 
 func NewInfraResources(logger *slog.Logger) (*InfraResources, error) {
-
     // Database - Postgres
     var db ports.Database
-    dbClient, err := database.NewPostgresClient("postgres://user:password@localhost:5432/resilience_db?sslmode=disable") 
+    dbClient, err := database.NewPostgresClient("postgres://user:password@localhost:5433/resilience_db?sslmode=disable") 
     if err != nil {
         logger.Warn("Database offline, switching to No-Op", "error", err)
         db = database.NewDatabaseNoOp()
@@ -29,7 +28,7 @@ func NewInfraResources(logger *slog.Logger) (*InfraResources, error) {
 
     // Cache - Redis
     var rdb ports.Cache
-    cacheClient, err := cache.NewRedisCache("localhost:6379")
+    cacheClient, err := cache.NewRedisCache("localhost:6380")
     if err != nil {
         logger.Warn("Redis offline, switching to No-Op", "error", err)
         rdb = cache.NewCacheNoOp()
@@ -39,7 +38,7 @@ func NewInfraResources(logger *slog.Logger) (*InfraResources, error) {
 
     // Broker - RabbitMQ
     var rbq ports.MessageBroker
-    brokerClient, err := broker.NewRabbitMQClient("amqp://guest:guest@localhost:5672/")
+    brokerClient, err := broker.NewRabbitMQClient("amqp://guest:guest@localhost:5673/")
     if err != nil {
         logger.Warn("RabbitMQ offline, switching to No-Op", "error", err)
         rbq = broker.NewBrokerNoOp()
