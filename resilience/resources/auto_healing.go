@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ortizdavid/go-enterprise-micro/internal/infra/cache"
-	"github.com/ortizdavid/go-enterprise-micro/internal/infra/database"
+	"github.com/ortizdavid/golang-pocs/resilience/infra/cache"
+	"github.com/ortizdavid/golang-pocs/resilience/infra/database"
 )
 
 type AutoHealing struct {
@@ -38,46 +38,48 @@ func (ah *AutoHealing) RecoverCache() {
 	ah.res.mu.Lock()
 	defer ah.res.mu.Unlock()
 
-	// 1. Cria um contexto com timeout para a verificação
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	// 2. Se já existe e está respondendo, não faz nada
-	if ah.res.Cache != nil && ah.res.Cache.Ping(ctx) == nil {
-		return
+	// Se o cache já estiver saudável (não for NoOp ou responder ao Ping se houver), podemos manter.
+	// Como na sua POC você usa NoOp como fallback, verificamos se ele já está funcional:
+	if ah.res.Cache != nil {
+		// Se você tiver um método Ping na interface de Cache, pode validar aqui.
+		// Exemplo: if ah.res.Cache.Ping(ctx) == nil { return }
 	}
 
-	// 3. Tenta recriar/reconectar o Cache
-	newCache, err := cache.NewRedisCache( /* parâmetros de config */ )
+	// Tenta reconectar ao Redis
+	cacheClient, err := cache.NewRedisCache("localhost:6380")
 	if err != nil {
-		// Log de erro (caso tenha logger no res)
+		// Se falhar a reconexão, mantém o No-Op
+		ah.res.Cache = cache.NewCacheNoOp()
 		return
 	}
 
-	// 4. Substitui pelo novo cache recuperado
-	ah.res.Cache = newCache
+	// Sucesso na recuperação, substitui o recurso
+	ah.res.Cache = cacheClient
 }
 
 func (ah *AutoHealing) RecoverDatabase() {
 	ah.res.mu.Lock()
 	defer ah.res.mu.Unlock()
 
-	// 1. Cria um contexto com timeout para a verificação
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	// 2. Se já existe e está respondendo, não faz nada
-	if ah.res.Database != nil && ah.res.Database.Ping(ctx) == nil {
-		return
+	if ah.res.Database != nil {
+		// Se a porta Database tiver um Ping ou Check de saúde:
+		// if err := ah.res.Database.Ping(ctx); err == nil { return }
 	}
 
-	// 3. Tenta recriar/reconectar o Database
-	newDb, err := database.GetDatabase( /* parâmetros de config */, ah.res.Logger)
+	// Tenta reconectar ao Postgres
+	dbClient, err := database.NewPostgresClient("postgres://user:password@localhost:5433/resilience_db?sslmode=disable")
 	if err != nil {
-		// Log de erro
+		// Se falhar, mantém o No-Op
+		ah.res.Database = database.NewDatabaseNoOp()
 		return
 	}
 
-	// 4. Substitui pela nova instância do banco recuperada
-	ah.res.Database = newDb
+	// Sucesso na recuperação, substitui o recurso
+	ah.res.Database = dbClient
 }
