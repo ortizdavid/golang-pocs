@@ -1,18 +1,20 @@
 package resources
 
 import (
-    "log/slog"
+	"log/slog"
+	"sync"
 
-    "github.com/ortizdavid/golang-pocs/resilience/ports"
-    "github.com/ortizdavid/golang-pocs/resilience/infra/database"
-    "github.com/ortizdavid/golang-pocs/resilience/infra/cache"
-    "github.com/ortizdavid/golang-pocs/resilience/infra/broker"
+	"github.com/ortizdavid/golang-pocs/resilience/infra/broker"
+	"github.com/ortizdavid/golang-pocs/resilience/infra/cache"
+	"github.com/ortizdavid/golang-pocs/resilience/infra/database"
+	"github.com/ortizdavid/golang-pocs/resilience/ports"
 )
 
 type InfraResources struct {
     Database      ports.Database
     Cache         ports.Cache
     MessageBroker ports.MessageBroker
+    mu            *sync.RWMutex
 }
 
 func NewInfraResources(logger *slog.Logger) (*InfraResources, error) {
@@ -54,6 +56,13 @@ func NewInfraResources(logger *slog.Logger) (*InfraResources, error) {
 }
 
 func (res *InfraResources) Close() error {
+    if res.Database != nil {
+        return res.Database.Close()
+    }
+    return nil
+}
+
+func (res *InfraResources) Ping() error {
     if res.Database != nil {
         return res.Database.Close()
     }
