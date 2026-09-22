@@ -1,14 +1,15 @@
 package main
 
 import (
+	"context" // <-- Adicionado para o contexto do AutoHealing
 	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/ortizdavid/golang-pocs/resilience/handlers"
 	"github.com/ortizdavid/golang-pocs/resilience/resources"
-	"github.com/ortizdavid/golang-pocs/resilience/handlers" 
 )
 
 func main() {
@@ -19,6 +20,14 @@ func main() {
 		logger.Error("Critical failure during resource initialization", "error", err)
 		os.Exit(1)
 	}
+
+	// 1. Criamos um contexto raiz para gerenciar o ciclo de vida dos background workers (como o AutoHealing)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	// 2. Instancia e inicia o AutoHealing passando o contexto e os recursos de infra
+	autoHealer := resources.NewAutoHealing(infra)
+	autoHealer.StartAutohealing(ctx) // <-- Aqui ele começa a rodar em background
 
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: false,
@@ -41,6 +50,9 @@ func main() {
 	<-quit 
 	
 	logger.Info("Shutdown signal received. Cleaning up...")
+
+	// 3. Ao cancelar o contexto aqui, o loop do AutoHealing (select <-ctx.Done()) encerra instantaneamente
+	cancel()
 
 	if err := app.Shutdown(); err != nil {
 		logger.Error("Fiber shutdown failed", "error", err)
