@@ -1,7 +1,7 @@
 package main
 
 import (
-	"context" // <-- Adicionado para o contexto do AutoHealing
+	"context" 
 	"log/slog"
 	"os"
 	"os/signal"
@@ -21,13 +21,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	// 1. Criamos um contexto raiz para gerenciar o ciclo de vida dos background workers (como o AutoHealing)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	// 2. Instancia e inicia o AutoHealing passando o contexto e os recursos de infra
 	autoHealer := resources.NewAutoHealing(infra)
-	autoHealer.StartAutohealing(ctx) // <-- Aqui ele começa a rodar em background
+	autoHealer.StartAutohealing(ctx) 
 
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: false,
@@ -46,12 +44,10 @@ func main() {
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
-
 	<-quit 
 	
 	logger.Info("Shutdown signal received. Cleaning up...")
 
-	// 3. Ao cancelar o contexto aqui, o loop do AutoHealing (select <-ctx.Done()) encerra instantaneamente
 	cancel()
 
 	if err := app.Shutdown(); err != nil {
