@@ -18,16 +18,16 @@ func main() {
 	mux := http.NewServeMux()
 
 	// Repository, Service, and Handler
-	repo := repositories.NewCalculationRepository(db)
-	service := services.NewCalculationService(repo)
+	repo := repositories.NewInvoiceRepository(db)
+	service := services.NewInvoiceService(repo)
 	handler := handlers.NewCalculationHandler(service)
 
 	// HTTP Routes
 	mux.HandleFunc("GET /", handler.Index)
-	mux.HandleFunc("POST /calculations", handler.Calculate)
-	mux.HandleFunc("POST /calculations/simulate", handler.Simulate)
-	mux.HandleFunc("GET /calculations", handler.ListInvoices)
-	mux.HandleFunc("GET /calculations/{id}", handler.GetInvoice)
+	mux.HandleFunc("POST /invoices", handler.Calculate)
+	mux.HandleFunc("POST /invoices/simulate", handler.Simulate)
+	mux.HandleFunc("GET /invoices", handler.ListInvoices)
+	mux.HandleFunc("GET /invoices/{id}", handler.GetInvoice)
 
 	// Run the Server
 	log.Println("Calculation Breakdown server running at http://localhost:8080")

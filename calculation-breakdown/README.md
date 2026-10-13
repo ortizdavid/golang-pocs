@@ -24,10 +24,10 @@ The project follows a clean, modular structure:
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
 | `GET` | `/` | API overview and available endpoints |
-| `POST` | `/calculations` | Execute calculation, record steps, and persist to database |
-| `POST` | `/calculations/simulate` | Simulate calculation purely in memory without persisting |
-| `GET` | `/calculations` | List all saved calculation invoices |
-| `GET` | `/calculations/{id}` | Get calculation details and breakdown steps by ID |
+| `POST` | `/invoices` | Execute calculation, record steps, and persist to database |
+| `POST` | `/invoices/simulate` | Simulate calculation purely in memory without persisting |
+| `GET` | `/invoices` | List all saved calculation invoices |
+| `GET` | `/invoices/{id}` | Get calculation details and breakdown steps by ID |
 
 ## Getting Started
 
@@ -75,7 +75,7 @@ curl -X GET http://localhost:8080/
 Process, persist, and retrieve the full calculation breakdown:
 
 ```bash
-curl -X POST http://localhost:8080/calculations \
+curl -X POST http://localhost:8080/invoices \
   -H "Content-Type: application/json" \
   -d '{"unitPrice": 1500.0, "quantity": 3, "taxRate": 0.14}'
 
@@ -86,7 +86,7 @@ curl -X POST http://localhost:8080/calculations \
 Simulate the calculation in memory without saving to the database:
 
 ```bash
-curl -X POST http://localhost:8080/calculations/simulate \
+curl -X POST http://localhost:8080/invoices/simulate \
   -H "Content-Type: application/json" \
   -d '{"unitPrice": 2500.0, "quantity": 2, "taxRate": 0.14}'
 
@@ -97,7 +97,7 @@ curl -X POST http://localhost:8080/calculations/simulate \
 Retrieve all saved calculation records:
 
 ```bash
-curl -X GET http://localhost:8080/calculations
+curl -X GET http://localhost:8080/invoices
 
 ```
 
@@ -106,7 +106,7 @@ curl -X GET http://localhost:8080/calculations
 Fetch a specific invoice and its breakdown steps using its UUID:
 
 ```bash
-curl -X GET "http://localhost:8080/calculations?id=YOUR_INVOICE_UUID_HERE"
+curl -X GET "http://localhost:8080/invoices/YOUR_INVOICE_UUID_HERE"
 
 ```
 

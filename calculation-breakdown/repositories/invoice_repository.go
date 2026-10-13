@@ -6,18 +6,18 @@ import (
 	"github.com/ortizdavid/golang-pocs/calculation-breakdown/models"
 )
 
-type CalculationRepository struct {
+type InvoiceRepository struct {
 	DB *sql.DB
 }
 
-func NewCalculationRepository(db *sql.DB) *CalculationRepository {
-	return &CalculationRepository{
+func NewInvoiceRepository(db *sql.DB) *InvoiceRepository {
+	return &InvoiceRepository{
 		DB: db,
 	}
 }
 
 // Save persists the invoice and all breakdown steps within a single transaction
-func (repo *CalculationRepository) Save(invoice *models.Invoice) error {
+func (repo *InvoiceRepository) Save(invoice *models.Invoice) error {
 	tx, err := repo.DB.Begin()
 	if err != nil {
 		return err
@@ -46,7 +46,7 @@ func (repo *CalculationRepository) Save(invoice *models.Invoice) error {
 	return tx.Commit()
 }
 
-func (repo *CalculationRepository) GetByID(id string) (*models.Invoice, error) {
+func (repo *InvoiceRepository) GetByID(id string) (*models.Invoice, error) {
 	// Fetches the main invoice
 	invoiceQuery := `SELECT id, total, currency, created_at FROM invoices WHERE id = ?`
 	row := repo.DB.QueryRow(invoiceQuery, id)
@@ -62,11 +62,11 @@ func (repo *CalculationRepository) GetByID(id string) (*models.Invoice, error) {
 
 	// Fetches the associated steps ordered chronologically
 	stepsQuery := `
-		SELECT id, invoice_id, step_order, label, expression, formula, value, description 
-		FROM invoice_breakdown_steps 
-		WHERE invoice_id = ? 
-		ORDER BY step_order ASC
-	`
+        SELECT id, invoice_id, step_order, label, expression, formula, value, description 
+        FROM invoice_breakdown_steps 
+        WHERE invoice_id = ? 
+        ORDER BY step_order ASC
+    `
 	rows, err := repo.DB.Query(stepsQuery, id)
 	if err != nil {
 		return nil, err
@@ -86,33 +86,39 @@ func (repo *CalculationRepository) GetByID(id string) (*models.Invoice, error) {
 	return &inv, nil
 }
 
-func (repo *CalculationRepository) GetAll() ([]models.Invoice, error) {
+func (repo *InvoiceRepository) GetAll() ([]models.Invoice, error) {
 	query := `SELECT id, total, currency, created_at FROM invoices`
 	rows, err := repo.DB.Query(query)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
 	var invoices []models.Invoice
+
+	// 1. Fetch all invoices and close the main result set immediately to release the connection
 	for rows.Next() {
 		var inv models.Invoice
 		if err := rows.Scan(&inv.ID, &inv.Total, &inv.Currency, &inv.CreatedAt); err != nil {
+			rows.Close()
 			return nil, err
 		}
+		invoices = append(invoices, inv)
+	}
+	rows.Close()
 
-		// Loads the steps for each invoice
+	// 2. Safely query steps for each invoice using the freed connection pool
+	for i := range invoices {
 		stepsQuery := `
-			SELECT id, invoice_id, step_order, label, expression, formula, value, description 
-			FROM invoice_breakdown_steps 
-			WHERE invoice_id = ? 
-			ORDER BY step_order ASC
-		`
-		stepRows, err := repo.DB.Query(stepsQuery, inv.ID)
+            SELECT id, invoice_id, step_order, label, expression, formula, value, description 
+            FROM invoice_breakdown_steps 
+            WHERE invoice_id = ? 
+            ORDER BY step_order ASC
+        `
+		stepRows, err := repo.DB.Query(stepsQuery, invoices[i].ID)
 		if err != nil {
 			return nil, err
 		}
-		
+
 		var steps []models.Step
 		for stepRows.Next() {
 			var s models.Step
@@ -124,21 +130,8 @@ func (repo *CalculationRepository) GetAll() ([]models.Invoice, error) {
 		}
 		stepRows.Close()
 
-		inv.Steps = steps
-		invoices = append(invoices, inv)
+		invoices[i].Steps = steps
 	}
+
 	return invoices, nil
-}
-
-func (repo *CalculationRepository) Delete(id string) error {
-	query := `DELETE FROM invoices WHERE id = ?`
-	_, err := repo.DB.Exec(query, id)
-	return err
-}
-
-func (repo *CalculationRepository) Exists(id string) (bool, error) {
-	var exists bool
-	query := `SELECT EXISTS(SELECT 1 FROM invoices WHERE id = ?)`
-	err := repo.DB.QueryRow(query, id).Scan(&exists)
-	return exists, err
 }

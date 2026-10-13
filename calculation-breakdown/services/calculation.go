@@ -2,12 +2,13 @@ package services
 
 import (
 	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/ortizdavid/golang-pocs/calculation-breakdown/models"
 )
 
 // calculateBreakdown is a pure function that only processes steps without touching the DB
-func (s *CalculationService) calculateBreakdown(base float64, qty float64, taxRate float64) models.Invoice {
+func (s *InvoiceService) calculateBreakdown(base float64, qty float64, taxRate float64) models.Invoice {
 	invoiceID := uuid.New().String()
 
 	// Step 1: Base Calculation (Quantity x Unit Price)
